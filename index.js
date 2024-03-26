@@ -16,12 +16,14 @@ function validateTitleExist(book) {
 function getBookById(id) {
   for (let i = 0; i < books.length; i++) {
     if (books[i].id === id) {
-      return books[i];
+      return books[i]
     }
   }
 }
 
-const books = [ 
+
+
+let books = [ 
 {
 id: 1,
 title: "My book",
@@ -31,7 +33,7 @@ genre: "Police"
 {
   id: 2,
   title: "My book 2",
-  author: "Roberio Skyrabo",
+  author: "Roberio",
   genre: "Comedy"
 }
  ]
@@ -64,7 +66,11 @@ app.get("/books/:bookId", (req, res) => {
 })
 
 app.delete("/books/:bookId", (req, res) => {
-  res.send("Delete the book with a specific Id")
+  const bookId = parseInt(req.params.bookId) 
+  const deletedBook = getBookById(bookId)
+  books = books.filter((book) => book.id !== bookId)
+  
+  res.json(deletedBook)
 })
 
 app.get("/authors", (req, res) => {

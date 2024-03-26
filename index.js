@@ -6,7 +6,18 @@ app.use(express.urlencoded({extended : true}))
 
 function validateTitleExist(book) {
   for (let i = 0; i < books.length; i++) {
-    
+    if (books[i].title === book.title) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getBookById(id) {
+  for (let i = 0; i < books.length; i++) {
+    if (books[i].id === id) {
+      return books[i];
+    }
   }
 }
 
@@ -33,9 +44,11 @@ app.get("/books", (req, res) => {
 })
 
 app.post("/books", (req, res) => {
-  
   const newBook = req.body
-  books.push(newBook)
+  if (!validateTitleExist(newBook)) {
+    books.push(newBook)
+  }
+  
   res.json(books)
 
 })
@@ -45,7 +58,9 @@ app.put("/books/bookId", (req, res) => {
 })
 
 app.get("/books/:bookId", (req, res) => {
-  res.send("books Id")
+  const bookId = parseInt(req.params.bookId)
+  const book = getBookById(bookId)
+  res.json(book)
 })
 
 app.delete("/books/:bookId", (req, res) => {

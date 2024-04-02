@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const Database = require('better-sqlite3');
+const db = new Database('bookstore.db', { verbose: console.log });
 const port = 3000
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
@@ -91,3 +93,10 @@ app.get("/authors/:authorsId", (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+/*db.close((err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('Close the database connection.');
+});*/

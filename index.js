@@ -23,22 +23,6 @@ function getBookById(id) {
   }
 }
 
-
-
-let books = [ 
-{
-id: 1,
-title: "My book",
-author: "Bukowski",
-genre: "Police"
-},
-{
-  id: 2,
-  title: "My book 2",
-  author: "Roberio",
-  genre: "Comedy"
-}
- ]
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -50,7 +34,7 @@ app.get("/books", (req, res) => {
 app.post("/books", (req, res) => {
   const newBook = req.body
   if (!validateTitleExist(newBook)) {
-    books.push(newBook)
+    db.prepare('INSERT ')
   }
   
   res.json(books)

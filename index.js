@@ -6,23 +6,6 @@ const port = 3000
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
-function validateTitleExist(book) {
-  for (let i = 0; i < books.length; i++) {
-    if (books[i].title === book.title) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function getBookById(id) {
-  for (let i = 0; i < books.length; i++) {
-    if (books[i].id === id) {
-      return books[i]
-    }
-  }
-}
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -49,7 +32,7 @@ app.put("/books/:bookId", (req, res) => {
 
 app.get("/books/:bookId", (req, res) => {
   const bookId = parseInt(req.params.bookId)
-  const book = getBookById(bookId)
+  const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
   res.json(book)
 })
 

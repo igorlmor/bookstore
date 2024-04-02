@@ -25,8 +25,9 @@ app.post("/books", (req, res) => {
 app.put("/books/:bookId", (req, res) => {
   const updatedBook = req.body
   const bookId = parseInt(req.params.bookId)
-  const book = getBookById(bookId)
-  
+  const stmt = db.prepare("UPDATE books SET title = ?, genre = ? WHERE id = ?")
+  const info = stmt.run(updatedBook.title, updatedBook.genre, bookId)
+  res.json({"message": "Book successfully updated"}) 
 
 })
 
@@ -37,11 +38,9 @@ app.get("/books/:bookId", (req, res) => {
 })
 
 app.delete("/books/:bookId", (req, res) => {
-  const bookId = parseInt(req.params.bookId) 
-  const deletedBook = getBookById(bookId)
-  books = books.filter((book) => book.id !== bookId)
-  
-  res.json(deletedBook)
+  const bookId = parseInt(req.params.bookId)
+  const stmt = db.prepare('DELETE FROM books WHERE id = ?').run(bookId)
+  res.json({"message":"Book deleted successfully"})
 })
 
 app.get("/authors", (req, res) => {

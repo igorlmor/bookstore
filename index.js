@@ -55,8 +55,12 @@ app.post("/books", (req, res) => {
 
 })
 
-app.put("/books/bookId", (req, res) => {
-  res.send("Update the book with a specific Id")
+app.put("/books/:bookId", (req, res) => {
+  const updatedBook = req.body
+  const bookId = parseInt(req.params.bookId)
+  const book = getBookById(bookId)
+  
+
 })
 
 app.get("/books/:bookId", (req, res) => {

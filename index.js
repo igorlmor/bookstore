@@ -28,17 +28,15 @@ app.get('/', (req, res) => {
 })
 
 app.get("/books", (req, res) => {
+  const books = db.prepare('SELECT * FROM books').all()
   res.json(books)
 })
 
 app.post("/books", (req, res) => {
   const newBook = req.body
-  if (!validateTitleExist(newBook)) {
-    db.prepare('INSERT ')
-  }
-  
-  res.json(books)
-
+  const stmt = db.prepare('INSERT INTO books (author_id, title, genre) VALUES (?, ?, ?)')
+  const info = stmt.run(newBook.authorId, newBook.title, newBook.genre)
+  res.json(newBook)
 })
 
 app.put("/books/:bookId", (req, res) => {
@@ -64,12 +62,17 @@ app.delete("/books/:bookId", (req, res) => {
 })
 
 app.get("/authors", (req, res) => {
-  res.send("all authors")
+  const authors = db.prepare('SELECT * FROM authors').all()
+     
+  res.json(authors)
 })
 
 app.get("/authors/:authorsId", (req, res) => {
-  res.send("authors ID's")
+  const authorId = parseInt(req.params.authorsId)
+  const author = db.prepare(' SELECT * FROM authors WHERE id = ? ').get(authorId)
+  res.json(author)
 })
+
 
 
 

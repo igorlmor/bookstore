@@ -11,36 +11,63 @@ app.get('/', (req, res) => {
 })
 
 app.get("/books", (req, res) => {
+  try {
   const books = db.prepare('SELECT * FROM books').all()
   res.json(books)
+  .sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)    
+  }
 })
 
 app.get("/books/:bookId", (req, res) => {
-  const bookId = parseInt(req.params.bookId)
-  const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
-  res.json(book)
+  try {
+    const bookId = parseInt(req.params.bookId)
+    const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
+    res.json(book).sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(404)
+  }
 })
 
 app.post("/books", (req, res) => {
-  const newBook = req.body
-  const stmt = db.prepare('INSERT INTO books (author_id, title, genre) VALUES (?, ?, ?)')
-  const info = stmt.run(newBook.authorId, newBook.title, newBook.genre)
-  res.json(newBook)
+  try {
+    const newBook = req.body
+    const stmt = db.prepare('INSERT INTO books (author_id, title, genre) VALUES (?, ?, ?)')
+    const info = stmt.run(newBook.authorId, newBook.title, newBook.genre)
+    res.json(newBook).sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
 })
 
 app.put("/books/:bookId", (req, res) => {
-  const updatedBook = req.body
-  const bookId = parseInt(req.params.bookId)
-  const stmt = db.prepare("UPDATE books SET title = ?, genre = ? WHERE id = ?")
-  const info = stmt.run(updatedBook.title, updatedBook.genre, bookId)
-  res.json({"message": "Book successfully updated"}) 
+  try {
+    const updatedBook = req.body
+    const bookId = parseInt(req.params.bookId)
+    const stmt = db.prepare("UPDATE books SET title = ?, genre = ? WHERE id = ?")
+    const info = stmt.run(updatedBook.title, updatedBook.genre, bookId)
+    res.sendStatus(200) 
+
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
 
 })
 
 app.delete("/books/:bookId", (req, res) => {
+  try {
   const bookId = parseInt(req.params.bookId)
   const stmt = db.prepare('DELETE FROM books WHERE id = ?').run(bookId)
-  res.json({"message":"Book deleted successfully"})
+  res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
 })
 
 app.get("/authors", (req, res) => {

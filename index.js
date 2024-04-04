@@ -13,8 +13,7 @@ app.get('/', (req, res) => {
 app.get("/books", (req, res) => {
   try {
   const books = db.prepare('SELECT * FROM books').all()
-  res.json(books)
-  .sendStatus(200)
+  res.status(200).json(books)
   } catch (error) {
     console.log(error)
     res.sendStatus(500)    
@@ -25,7 +24,7 @@ app.get("/books/:bookId", (req, res) => {
   try {
     const bookId = parseInt(req.params.bookId)
     const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
-    res.json(book).sendStatus(200)
+    res.status(200).json(book)
   } catch (error) {
     console.log(error)
     res.sendStatus(404)
@@ -37,7 +36,7 @@ app.post("/books", (req, res) => {
     const newBook = req.body
     const stmt = db.prepare('INSERT INTO books (author_id, title, genre) VALUES (?, ?, ?)')
     const info = stmt.run(newBook.authorId, newBook.title, newBook.genre)
-    res.json(newBook).sendStatus(200)
+    res.status(200).json(newBook)
   } catch (error) {
     console.log(error)
     res.sendStatus(500)

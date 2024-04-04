@@ -15,6 +15,12 @@ app.get("/books", (req, res) => {
   res.json(books)
 })
 
+app.get("/books/:bookId", (req, res) => {
+  const bookId = parseInt(req.params.bookId)
+  const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
+  res.json(book)
+})
+
 app.post("/books", (req, res) => {
   const newBook = req.body
   const stmt = db.prepare('INSERT INTO books (author_id, title, genre) VALUES (?, ?, ?)')
@@ -29,12 +35,6 @@ app.put("/books/:bookId", (req, res) => {
   const info = stmt.run(updatedBook.title, updatedBook.genre, bookId)
   res.json({"message": "Book successfully updated"}) 
 
-})
-
-app.get("/books/:bookId", (req, res) => {
-  const bookId = parseInt(req.params.bookId)
-  const book = db.prepare('SELECT * FROM books WHERE id = ?').get(bookId)
-  res.json(book)
 })
 
 app.delete("/books/:bookId", (req, res) => {
